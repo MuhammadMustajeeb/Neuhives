@@ -1,8 +1,18 @@
 "use client";
 
 import * as React from "react";
-import * as LabelPrimitive from "@radix-ui/react-label@2.1.2";
-import { Slot } from "@radix-ui/react-slot@1.1.2";
+import * as LabelPrimitive from "@radix-ui/react-label";
+
+// Fallback Slot component when @radix-ui/react-slot is not installed.
+// It will clone a single child element with additional props, or render children as-is.
+// This provides the minimal behavior needed by this form component and satisfies typings.
+const Slot: React.FC<any> = ({ children, ...props }) => {
+  if (React.isValidElement(children)) {
+    return React.cloneElement(children as React.ReactElement, props);
+  }
+  return <>{children}</>;
+};
+
 import {
   Controller,
   FormProvider,
@@ -11,7 +21,7 @@ import {
   type ControllerProps,
   type FieldPath,
   type FieldValues,
-} from "react-hook-form@7.55.0";
+} from "react-hook-form";
 
 import { cn } from "./utils";
 import { Label } from "./label";
